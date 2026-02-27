@@ -8,8 +8,8 @@ import 'package:learningbloc/bloc/internet_bloc/internet_state.dart';
 // jab koi screen khatam hoti ha tu bloc automatically close hoti ha but ".listen" close nhi is ko handing karna kiya hum use karta ha streamsubscription ko..
 class InternetBloc extends Bloc<InternetEvent, InternetState> {
   // this comes form the Packages
-  Connectivity _connectivity = Connectivity();
-  StreamSubscription? connectivitySubscription;
+  final Connectivity _connectivity = Connectivity();
+  StreamSubscription<List<ConnectivityResult>>? connectivitySubscription;
 
   // constructor
   InternetBloc() : super(InternetInitialState()) {
@@ -21,15 +21,25 @@ class InternetBloc extends Bloc<InternetEvent, InternetState> {
     // emit is back to transfer the data to UI
     on<InternetGainedEvent>((event, emit) => emit(InternetGainedState()));
 
-   connectivitySubscription = _connectivity.onConnectivityChanged.listen((result) {
-      // if user agr connect ho mobile ye wifi se tu ye statement chali gi....
-      if (result == ConnectivityResult.mobile ||
-          result == ConnectivityResult.wifi) {
-        add(InternetGainedEvent());
-      } else {
-        add(InternetLostEvent());
-      }
-    });
+    _connectivity.checkConnectivity().then(_handleConnectivityResults);
+
+    connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_handleConnectivityResults);
+  }
+
+  void _handleConnectivityResults(List<ConnectivityResult> results) {
+    final hasConnection = results.contains(ConnectivityResult.mobile) ||
+        results.contains(ConnectivityResult.wifi) ||
+        results.contains(ConnectivityResult.ethernet) ||
+        results.contains(ConnectivityResult.vpn) ||
+        results.contains(ConnectivityResult.bluetooth) ||
+        results.contains(ConnectivityResult.other);
+
+    if (hasConnection) {
+      add(InternetGainedEvent());
+    } else {
+      add(InternetLostEvent());
+    }
   }
 
   // ye function is time work karti jab ap bloc(me screen) close hoti 
