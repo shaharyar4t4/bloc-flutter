@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
       // appBar: AppBar(
       //   title: const Text('Home Screen'),
       // ),
-      body: SafeArea(child: Center(child: Text('Welcome to the Home Screen!'))),
+      body: SafeArea(child: Center(child: Text('Loading...'))),
     );
   }
 }
