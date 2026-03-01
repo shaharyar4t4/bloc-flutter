@@ -1,13 +1,13 @@
-// Event in simple it just class
+// // Event in simple it just class
 
-abstract class InternetState {}
+// abstract class InternetState {}
 
 
- // InternetState is connected to InternetLostState or InternetGainedState
+//  // InternetState is connected to InternetLostState or InternetGainedState
 
- class InternetInitialState extends InternetState{}
+//  class InternetInitialState extends InternetState{}
 
-class InternetLostState extends InternetState{}
+// class InternetLostState extends InternetState{}
 
-class InternetGainedState extends InternetState{}
+// class InternetGainedState extends InternetState{}
 
